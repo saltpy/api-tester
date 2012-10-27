@@ -1,24 +1,33 @@
-from apitester import Schema, Runner, is_always_a_match
+from apitester import Schema, Runner, is_exactly
+from requests import get
 
 
-def merchant_ref(v):
-    return is_always_a_match(v)
+def httpbin(*suffix):
+    return "http://httpbin.org/" + '/'.join(suffix)
 
 
-def no_invalid_test():
-    s = Schema([is_always_a_match])
-    s.add('passing mref')
-    r = Runner(s, "http://httpbin.org/post")
+def one(v):
+    return is_exactly(v, "1")
+
+
+def one_valid_test():
+    s = Schema([one])
+    s.add("1")
+    r = Runner(s, httpbin("post"))
     r.run()
 
 
 def one_invalid_test():
-    s = Schema([is_always_a_match])
-    s.add('passing_mref')
-    r = Runner(s, "http://httpbin.org/post", invalid={'MerchantRef': None})
+    s = Schema([one])
+    s.add("1")
+    r = Runner(s, httpbin("post"), invalid={'One': "10"})
     r.run()
 
 
 if __name__ == '__main__':
-    no_invalid_test()
+    r = get(httpbin("get"))
+    # Test that httpbin is up
+    assert r.status_code == 200
+
+    one_valid_test()
     one_invalid_test()

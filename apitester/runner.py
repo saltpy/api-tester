@@ -20,18 +20,12 @@ class Runner(object):
         self._report()
 
     def _get_facts(self):
-        print self.response
         self.actual = []
 
     def _report(self):
-        if self.actual == self.expected:
-            print "Test Passed."
-        else:
-            print "Test Failed:"
-            print "Called with:\n%s" %(self.payload,)
-            print "-" * 80
-            for fact in self.actual:
-                if fact not in self.expected:
-                    print "Mismatch: %s was not returned" %(fact)
-            print "-" * 80
-
+        print "-" * 80
+        print "PASS:" if self.actual == self.expected else "FAIL:"
+        print "\targs=%s\n\tresponse=%s\n" %(self.payload, self.response) 
+        for fact in self.actual:
+            if fact not in self.expected:
+                print "Mismatch on %s" %(fact,)
