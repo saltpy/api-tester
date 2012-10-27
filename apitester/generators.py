@@ -17,10 +17,7 @@ class Generator(object):
         return "".join(r)
 
     def invalid(self):
-        if self.SHORTEST is 0:
-            l_index = 1
-        else:
-            l_index = randint(0,1)
+        l_index = 1 if self.SHORTEST == 0 else randint(0,1)
         length = [randint(self.LONGEST + 1, self.LONGEST + 10),
                 randint(0, min(self.SHORTEST - 1, 9))][l_index]
         r = []
