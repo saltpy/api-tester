@@ -17,9 +17,8 @@ class Generator(object):
         return "".join(r)
 
     def invalid(self):
-        l_index = 1 if self.SHORTEST == 0 else randint(0,1)
-        length = [randint(self.LONGEST + 1, self.LONGEST + 10),
-                randint(0, min(self.SHORTEST - 1, 9))][l_index]
+        ivlengths = range(0, max(0, self.SHORTEST - 1)) + range(self.LONGEST + 1, self.LONGEST + 10)
+        length = ivlengths[randint(0, len(ivlengths) - 1)]
         r = []
         while len(r) < length:
             r.append(self.INVALID[randint(0, len(self.INVALID) - 1)])
