@@ -1,8 +1,10 @@
+from __future__ import print_function
 from requests import post
 
 
 class Runner(object):
-    def __init__(self, schema, url, invalid=None):
+    def __init__(self, schema, url, invalid=None, report_manager=print):
+        self.rm = report_manager
         self.url = url
         self.invalid = {} if invalid is None else invalid
         self.expected = []
@@ -23,9 +25,10 @@ class Runner(object):
         self.actual = []
 
     def _report(self):
-        print "-" * 80
-        print "PASS:" if self.actual == self.expected else "FAIL:"
-        print "\targs=%s\n\tresponse=%s\n" %(self.payload, self.response) 
+        self.rm("-" * 80)
+        self.rm("PASS:") if self.actual == self.expected else self.rm("FAIL:")
+        self.rm("\targs=" + str(self.payload))
+        self.rm("\tresponse=" + str(self.response)) 
         for fact in self.actual:
             if fact not in self.expected:
-                print "Mismatch on %s" %(fact,)
+                self.rm("Mismatch on " + str(fact))
